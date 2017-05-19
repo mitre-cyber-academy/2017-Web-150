@@ -1,5 +1,8 @@
 require 'sinatra'
 
+flag = 'MCA{LIzdfHTUNUuZBhFKW20CChxJbRSNZbvv0SGnyEXkcrn9bPEz}' #53 long
+empty ='-----------------------------------------------------'
+
 get '/' do
   '<title>No Page</title>
 <h1>Please access the home page</h1>
@@ -7,12 +10,12 @@ get '/' do
 end
 
 get '/home' do
-  @qid = Random.rand(70)
+  @qid = Random.rand(1000)
   erb :home
 end
 
 get '/captcha/validate' do
-  @qid = params[:qid]
+  @qid = Integer(params[:qid])
   if(params[:cb0].nil?)
     @cb = '0'
   else
@@ -34,6 +37,21 @@ get '/captcha/validate' do
     @cb += '1'
   end
   @answ = @cb
+  @resp = 'Incorrect'
+  expt = ''
+  temp = @qid.to_i
+  for i in 0..3
+    expt += (temp % 2).to_s
+    temp = temp / 2
+  end
+  if expt.eql?(@answ)
+    point = @qid.to_i % 53
+    if point.equal?0
+      @resp = flag[point, 1] + empty[point + 1..53]
+    else
+      @resp = empty[0..point - 1] + flag[point, 1] + empty[point + 1..53]
+    end
+  end
   erb :validate
 end
 
@@ -149,4 +167,4 @@ __END__
 
 
 @@ validate
-<h1>Received <%= @qid %> and <%= @answ %></h1>
+<h1>Here is your flag: <%= @resp %></h1>
