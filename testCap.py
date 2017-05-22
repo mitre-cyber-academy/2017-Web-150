@@ -1,7 +1,7 @@
 import urllib
 
 qid = -1
-baseurl = 'http://localhost:4567/captcha/validate?qid='
+baseurl = 'http://localhost:80/captcha/validate?qid='
 answ = '-----------------------------------------------------'
 resp = ''
 flag = ['&cb0=1', '&cb1=1', '&cb2=1', '&cb3=1', '&cb4=1', '&cb5=1']
