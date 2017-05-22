@@ -4,6 +4,8 @@ ONBUILD RUN bundle install
 
 COPY Server.rb /usr/src/app
 
+COPY public /usr/src/app
+
 RUN mkdir -p /usr/src/app
 
 WORKDIR /usr/src/app

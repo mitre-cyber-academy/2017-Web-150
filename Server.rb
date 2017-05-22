@@ -36,11 +36,21 @@ get '/captcha/validate' do
   else
     @cb += '1'
   end
+  if(params[:cb4].nil?)
+    @cb += '0'
+  else
+    @cb += '1'
+  end
+  if(params[:cb5].nil?)
+    @cb += '0'
+  else
+    @cb += '1'
+  end
   @answ = @cb
   @resp = 'Incorrect'
   expt = ''
-  temp = @qid.to_i
-  for i in 0..3
+  temp = (@qid.to_i + 7) * 13
+  for i in 0..5
     expt += (temp % 2).to_s
     temp = temp / 2
   end
@@ -94,21 +104,31 @@ __END__
             //Gets all areas in the map
             var all_checkbox_divs = document.getElementsByTagName("AREA");
 
-            for (var i=0;i<all_checkbox_divs.length;i++) {
+            for (var i = 0; i < all_checkbox_divs.length; i++) {
 
                 //adds onclick functions to all areas
                 all_checkbox_divs[i].onclick = function (e) {
+
                     var div_id = this.id;
-                    var checkbox_id =div_id.split("_")[0];
+                    var checkbox_id = div_id.split("_")[0];
                     var checkbox_element = document.getElementById(checkbox_id);
+
+                    var pic = document.getElementById(checkbox_id + '_pic');
+
+                    if (pic.src.toString().indexOf('images/cap0.png') !== -1) {
+                        pic.src = "images/cap1.png";
+                    }
+                    else {
+                        pic.src = "images/cap0.png";
+                    }
 
                     //toggles hidden checkboxes when areas are clicked
                     if (checkbox_element.checked === true) {
                         checkbox_element.checked = false;
-                        this.setAttribute("class","image-checkbox");
+                        this.setAttribute("class", "image-checkbox");
                     } else {
                         checkbox_element.checked = true;
-                        this.setAttribute("class","image-checkbox-checked");
+                        this.setAttribute("class", "image-checkbox-checked");
                     }
 
                 };
@@ -144,19 +164,39 @@ __END__
 <form action="/" method="post" id="captcha">
     <input name="qid" type="number" hidden value="<%= @qid %>">
     <input name="cb0" type="checkbox" id="cb0" class="cb"/>
-    <img src="images/cap.png" height="400" width="400" usemap="#capPic"/>
-    <map name="capPic">
+    <br/>
+    <img src="images/cap0.png" height="200" width="201" usemap="#capPic0" id="cb0_pic"/>
+    <img src="images/cap0.png" height="200" width="201" usemap="#capPic1" id="cb1_pic"/><br/>
+    <img src="images/cap0.png" height="200" width="201" usemap="#capPic2" id="cb2_pic"/>
+    <img src="images/cap0.png" height="200" width="201" usemap="#capPic3" id="cb3_pic"/><br/>
+    <img src="images/cap0.png" height="200" width="201" usemap="#capPic4" id="cb4_pic"/>
+    <img src="images/cap0.png" height="200" width="201" usemap="#capPic5" id="cb5_pic"/>
+    <map name="capPic0">
         <area id="cb0_proxy" coords="0,0,200,200"/>
-        <area id="cb1_proxy" coords="200,0,400,200"/>
-        <area id="cb2_proxy" coords="0,200,200,400"/>
-        <area id="cb3_proxy" coords="200,200,400,400"/>
+    </map>
+    <map name="capPic1">
+        <area id="cb1_proxy" coords="0,0,200,200"/>
+    </map>
+    <map name="capPic2">
+        <area id="cb2_proxy" coords="0,0,200,200"/>
+    </map>
+    <map name="capPic3">
+        <area id="cb3_proxy" coords="0,0,200,200"/>
+    </map>
+    <map name="capPic4">
+        <area id="cb4_proxy" coords="0,0,200,200"/>
+    </map>
+    <map name="capPic5">
+        <area id="cb5_proxy" coords="0,0,200,200"/>
     </map>
     <input name="cb1" type="checkbox" class="cb" id="cb1"/>
     <input name="cb2" type="checkbox" class="cb" id="cb2"/>
     <input name="cb3" type="checkbox" class="cb" id="cb3"/>
-    <br/><br/><br/>
+    <input name="cb4" type="checkbox" class="cb" id="cb4"/>
+    <input name="cb5" type="checkbox" class="cb" id="cb5"/>
+    <br/>
     Click all the images of <b id="noun"></b>.
-    <br/><br/><br/><br/>
+    <br/><br/>
     <input type="submit" value="Verify">
 </form>
 <div id="output">
