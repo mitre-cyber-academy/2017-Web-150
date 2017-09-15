@@ -1,5 +1,7 @@
 require 'sinatra'
 
+enable :inline_templates
+
 flag = 'MCA{LIzdfHTUNUuZBhFKW20CChxJbRSNZbvv0SGnyEXkcrn9bPEz}' #53 long
 empty ='-----------------------------------------------------'
 
